@@ -28,7 +28,7 @@ jobs:
       run: update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 100 --slave /usr/bin/g++ g++ /usr/bin/g++-4.8
 
     - name: Run build
-      working-directory: ./tracefix
+      working-directory: ./TraceFix
       run: make
     
     - name: Move release file to publish
@@ -37,7 +37,7 @@ jobs:
         mkdir -p publish/addons/tracefix/dlls
 
         # Move released file to dlls
-        mv ./tracefix/Release/tracefix_mm.so publish/addons/tracefix/dlls
+        mv ./TraceFix/Release/tracefix_mm.so publish/addons/tracefix/dlls
 
         # Copy cstrike contents to publish dir
         cp -ar cstrike/. publish
