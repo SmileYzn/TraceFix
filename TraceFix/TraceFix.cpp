@@ -35,44 +35,41 @@ void CTraceFix::TraceLine(const float* vStart, const float* vEnd, int fNoMonster
 {
 	if (fNoMonsters == dont_ignore_monsters)
 	{
-		if (gpGlobals->trace_flags == FTRACE_BULLET)
+		auto EntityIndex = g_engfuncs.pfnIndexOfEdict(pentToSkip);
+
+		if (EntityIndex > 0 && EntityIndex <= gpGlobals->maxClients)
 		{
-			auto EntityIndex = g_engfuncs.pfnIndexOfEdict(pentToSkip);
+			auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
 
-			if (EntityIndex > 0 && EntityIndex <= gpGlobals->maxClients)
+			if (Player)
 			{
-				auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
-
-				if (Player)
+				if (Player->IsAlive())
 				{
-					if (Player->IsAlive())
+					if (Player->m_pActiveItem)
 					{
-						if (Player->m_pActiveItem)
+						if ((Player->m_pActiveItem->iItemSlot() == PRIMARY_WEAPON_SLOT) || (Player->m_pActiveItem->iItemSlot() == PISTOL_SLOT))
 						{
-							if ((Player->m_pActiveItem->iItemSlot() == PRIMARY_WEAPON_SLOT) || (Player->m_pActiveItem->iItemSlot() == PISTOL_SLOT))
+							auto AimDistance = this->m_tf_distance[Player->m_pActiveItem->m_iId]->value;
+
+							if (AimDistance > 0.0f)
 							{
-								auto AimDistance = this->m_tf_distance[Player->m_pActiveItem->m_iId]->value;
+								int TargetIndex = 0, HitBoxPlace = 0;
 
-								if (AimDistance > 0.0f)
+								if (gTraceUtil.GetUserAiming(pentToSkip, &TargetIndex, &HitBoxPlace, AimDistance) > 0.0f)
 								{
-									int TargetIndex = 0, HitBoxPlace = 0;
-
-									if (gTraceUtil.GetUserAiming(pentToSkip, &TargetIndex, &HitBoxPlace, AimDistance) > 0.0f)
+									if (TargetIndex > 0 && TargetIndex <= gpGlobals->maxClients)
 									{
-										if (TargetIndex > 0)
-										{
-											g_engfuncs.pfnMakeVectors(pentToSkip->v.v_angle);
+										g_engfuncs.pfnMakeVectors(pentToSkip->v.v_angle);
 
-											auto Result = Vector(0.0f, 0.0f, 0.0f);
+										auto Result = Vector(0.0f, 0.0f, 0.0f);
 
-											Result[0] = (vStart[0] + (gpGlobals->v_forward[0] * 9999.0f));
+										Result[0] = (vStart[0] + (gpGlobals->v_forward[0] * 9999.0f));
 
-											Result[1] = (vStart[1] + (gpGlobals->v_forward[1] * 9999.0f));
+										Result[1] = (vStart[1] + (gpGlobals->v_forward[1] * 9999.0f));
 
-											Result[2] = (vStart[2] + (gpGlobals->v_forward[2] * 9999.0f));
+										Result[2] = (vStart[2] + (gpGlobals->v_forward[2] * 9999.0f));
 
-											g_engfuncs.pfnTraceLine(vStart, Result, fNoMonsters, pentToSkip, ptr);
-										}
+										g_engfuncs.pfnTraceLine(vStart, Result, fNoMonsters, pentToSkip, ptr);
 									}
 								}
 							}

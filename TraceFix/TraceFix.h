@@ -1,8 +1,5 @@
 #pragma once
 
-// FTRACE_BULLET BIT SUM
-#define FTRACE_BULLET BIT(16)
-
 class CTraceFix
 {
 public:
