@@ -5,9 +5,9 @@ tasklist /fi "imagename eq hlds.exe" |find ":" > nul
 
 ping 127.0.0.1 -n 2 > nul
 
-set "outputFile=..\Release\stub_mm.dll"
+set "outputFile=..\Release\tracefix_mm.dll"
 
-set "copyPath=D:\Files\Desktop\hlds\cstrike\addons\stub\dlls"
+set "copyPath=D:\Files\Desktop\hlds\cstrike\addons\tracefix\dlls"
 
 if exist %copyPath% (copy %outputFile% %copyPath%)
 

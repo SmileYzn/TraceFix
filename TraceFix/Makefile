@@ -5,7 +5,7 @@ CSSDK 		= include/cssdk
 METAMOD 	= include/metamod
 
 # Release file output name
-NAME 		= stub
+NAME 		= tracefix
 
 # Release directory
 BIN_DIR 	= Release
@@ -16,14 +16,6 @@ OBJECTS 	= *.cpp
 
 # Linker Libs
 LINKER 		= -static-libgcc -static-libstdc++
-
-# Compiler version check to static linking
-RES_COMPILER_VERSION := $(shell expr "`$(COMPILER) -dumpversion`" ">=" "5")
-
-# Link static lib if compiler is newer than minimum version
-ifeq "$(RES_COMPILER_VERSION)" "1"
-LINKER += -static-libgcc -static-libstdc++
-endif
 
 # C flags
 CFLAGS 		= -std=gnu++11 -pipe -g0 -O3 -s -flto -funroll-loops -fno-stack-protector -g -DNDEBUG -Dlinux -D__linux__ -D_GLIBCXX_USE_CXX11_ABI=0 -m32 -msse3 -msse4.1 -shared

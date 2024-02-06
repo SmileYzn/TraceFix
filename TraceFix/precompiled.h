@@ -19,12 +19,6 @@
 #define _vsnwprintf					vswprintf
 #endif
 
-// Standard library
-#include <string>
-#include <vector>
-#include <map>
-#include <array>
-
 // System Includes
 #ifndef _WIN32
 #include <unistd.h>
@@ -34,12 +28,16 @@
 #include <direct.h>
 #endif
 
-// CSSDK (ReHLDS SDK)
+// Standard
+#include <map>
+#include <vector>
+
+// HLSDK
 #include <extdll.h>
 #include <eiface.h>
 
 // MetaMod SDK
-#include <meta_api.h> 
+#include <meta_api.h>
 
 // ReHLDS Api
 #include <rehlds_api.h>
@@ -49,14 +47,15 @@
 #include <regamedll_api.h>
 #include <regamedll_const.h>
 
+// ReAPI
+#include "ReAPI.h"
+#include "ReGameAPI.h"
+
 // Plugin Includes
 #include "MetaMod.h"
 #include "MetaDLL.h"
 #include "MetaEngine.h"
 
-// ReAPI & ReGameAPI
-#include "ReAPI.h"
-#include "ReGameAPI.h"
-
-// Stub
-#include "stub.h"
+// Trace Fix
+#include "TraceFix.h"
+#include "TraceUtil.h"

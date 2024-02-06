@@ -3,11 +3,11 @@
 plugin_info_t Plugin_info =
 {
 	META_INTERFACE_VERSION,
-	"Stub Plugin",
+	"Trace Line Fix",
 	"0.0.1",
 	__DATE__,
 	"SmileY",
-	"https://github.com/SmileYzn/stub",
+	"https://github.com/SmileYzn/TraceFix",
 	"STUB",
 	PT_ANYTIME,
 	PT_ANYTIME,

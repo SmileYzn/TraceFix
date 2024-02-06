@@ -16,7 +16,7 @@ void ReAPI_Init()
 #ifdef WIN32
 		const std::vector<std::string> dllNames = { "swds.dll", "hw.dll", "sw.dll" };
 
-		for (auto const & dll : dllNames)
+		for (auto const& dll : dllNames)
 		{
 			if (engineModule = Sys_GetModuleHandle(dll.c_str()))
 			{
@@ -44,11 +44,11 @@ void ReAPI_Init()
 						if (g_ReAPI_Api->GetMinorVersion() >= REHLDS_API_VERSION_MINOR)
 						{
 							g_ReAPI_Funcs = g_ReAPI_Api->GetFuncs();
-							
+
 							g_ReAPI_ServerData = g_ReAPI_Api->GetServerData();
-							
+
 							g_ReAPI_Hookchains = g_ReAPI_Api->GetHookchains();
-							
+
 							g_ReAPI_ServerStatic = g_ReAPI_Api->GetServerStatic();
 
 							if (g_ReAPI_Hookchains)

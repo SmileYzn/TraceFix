@@ -4,4 +4,5 @@
 #pragma endregion
 
 #pragma region DLL_POST
+extern void DLL_POST_ServerActivate(edict_t* pEdictList, int edictCount, int clientMax);
 #pragma endregion

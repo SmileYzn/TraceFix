@@ -1,4 +1,4 @@
-LIBRARY stub_mm
+LIBRARY tracefix_mm
 
 EXPORTS
 

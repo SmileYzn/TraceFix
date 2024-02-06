@@ -10,10 +10,10 @@
     <Filter Include="MetaMod\MetaEngine">
       <UniqueIdentifier>{da3c82ff-52d5-44b5-b009-088fca686971}</UniqueIdentifier>
     </Filter>
-    <Filter Include="stub">
+    <Filter Include="TraceFix">
       <UniqueIdentifier>{8cba722c-05c8-4bc7-83ad-3a77afa6fba1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="stub\stub">
+    <Filter Include="TraceFix\TraceFix">
       <UniqueIdentifier>{fe14a8d3-12e4-4b91-ac6d-bc2588bbff7b}</UniqueIdentifier>
     </Filter>
     <Filter Include="MetaMod\MetaMod">
@@ -30,8 +30,8 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="stub.cpp">
-      <Filter>stub\stub</Filter>
+    <ClCompile Include="TraceFix.cpp">
+      <Filter>TraceFix\TraceFix</Filter>
     </ClCompile>
     <ClCompile Include="precompiled.cpp">
       <Filter>Precompiled</Filter>
@@ -53,8 +53,8 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stub.h">
-      <Filter>stub\stub</Filter>
+    <ClInclude Include="TraceFix.h">
+      <Filter>TraceFix\TraceFix</Filter>
     </ClInclude>
     <ClInclude Include="precompiled.h">
       <Filter>Precompiled</Filter>
@@ -76,8 +76,8 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="stub.def">
-      <Filter>stub</Filter>
+    <None Include="TraceFix.def">
+      <Filter>TraceFix</Filter>
     </None>
   </ItemGroup>
 </Project>
