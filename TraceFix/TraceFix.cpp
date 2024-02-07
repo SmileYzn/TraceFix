@@ -22,13 +22,15 @@ void CTraceFix::ServerActivate()
 
 							cvarName.append(SlotInfo->weaponName);
 
-							this->m_tf_distance[WeaponID] = gTraceUtil.CvarRegister(cvarName.c_str(), "2048.0");
+							this->m_tf_distance[WeaponID] = gTraceUtil.CvarRegister(cvarName.c_str(), "4096.0");
 						}
 					}
 				}
 			}
 		}
 	}
+
+	gTraceUtil.ServerCommand("exec %s/tracefix.cfg", gTraceUtil.GetPath());
 }
 
 void CTraceFix::TraceLine(const float* vStart, const float* vEnd, int fNoMonsters, edict_t* pentToSkip, TraceResult* ptr)

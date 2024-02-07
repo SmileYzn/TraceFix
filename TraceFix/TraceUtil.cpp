@@ -27,27 +27,73 @@ cvar_t* CTraceUtil::CvarRegister(const char* Name, const char* Value)
 	return CvarPointer;
 }
 
-float CTraceUtil::GetUserAiming(edict_t * pEdict, int* cpId, int* cpBody, float distance)
+const char* CTraceUtil::GetPath()
+{
+	if (this->m_Path.empty())
+	{
+		std::string GameDir = gpMetaUtilFuncs->pfnGetGameInfo(&Plugin_info, GINFO_GAMEDIR);
+
+		if (!GameDir.empty())
+		{
+			this->m_Path = gpMetaUtilFuncs->pfnGetPluginPath(&Plugin_info);
+
+			if (!this->m_Path.empty())
+			{
+				this->m_Path.erase(0, GameDir.length() + 1U);
+
+				std::replace(this->m_Path.begin(), this->m_Path.end(), (char)(92), (char)(47));
+
+				this->m_Path.erase(this->m_Path.find_last_of((char)(47)), this->m_Path.length());
+
+				while (std::count(this->m_Path.begin(), this->m_Path.end(), (char)(47)) > 1)
+				{
+					this->m_Path.erase(this->m_Path.find_last_of((char)(47)), this->m_Path.length());
+				}
+			}
+		}
+	}
+
+	return this->m_Path.c_str();
+}
+
+void CTraceUtil::ServerCommand(const char* Format, ...)
+{
+	char Command[255] = { 0 };
+
+	va_list	argptr;
+
+	va_start(argptr, Format);
+
+	vsnprintf(Command, sizeof(Command), Format, argptr);
+
+	va_end(argptr);
+
+	Q_strncat(Command, "\n", 1);
+
+	g_engfuncs.pfnServerCommand(Command);
+}
+
+float CTraceUtil::GetUserAiming(edict_t * pEntity, int* cpId, int* cpBody, float distance)
 {
 	float Result = 0.0f;
 
-	if (!FNullEnt(pEdict))
+	if (!FNullEnt(pEntity))
 	{
-		auto Entityindex = ENTINDEX(pEdict);
+		auto Entityindex = ENTINDEX(pEntity);
 
 		if (Entityindex > 0 && Entityindex <= gpGlobals->maxClients)
 		{
 			Vector v_forward;
 
-			Vector v_src = pEdict->v.origin + pEdict->v.view_ofs;
+			Vector v_src = pEntity->v.origin + pEntity->v.view_ofs;
 
-			g_engfuncs.pfnAngleVectors(pEdict->v.v_angle, v_forward, NULL, NULL);
+			g_engfuncs.pfnAngleVectors(pEntity->v.v_angle, v_forward, NULL, NULL);
 
 			TraceResult trEnd;
 
 			Vector v_dest = v_src + v_forward * distance;
 
-			g_engfuncs.pfnTraceLine(v_src, v_dest, 0, pEdict, &trEnd);
+			g_engfuncs.pfnTraceLine(v_src, v_dest, 0, pEntity, &trEnd);
 
 			*cpId = FNullEnt(trEnd.pHit) ? 0 : ENTINDEX(trEnd.pHit);
 
