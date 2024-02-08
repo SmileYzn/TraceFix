@@ -49,7 +49,7 @@ void CTraceFix::TraceLine(const float* vStart, const float* vEnd, int fNoMonster
 				{
 					if (Player->m_pActiveItem)
 					{
-						if ((Player->m_pActiveItem->iItemSlot() == PRIMARY_WEAPON_SLOT) || (Player->m_pActiveItem->iItemSlot() == PISTOL_SLOT))
+						if ((Player->m_pActiveItem->iItemSlot() == PRIMARY_WEAPON_SLOT) || (Player->m_pActiveItem->iItemSlot() == PISTOL_SLOT) || (Player->m_pActiveItem->iItemSlot() == KNIFE_SLOT))
 						{
 							auto AimDistance = this->m_tf_distance[Player->m_pActiveItem->m_iId]->value;
 
