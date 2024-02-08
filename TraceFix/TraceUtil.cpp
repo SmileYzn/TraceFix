@@ -73,7 +73,7 @@ void CTraceUtil::ServerCommand(const char* Format, ...)
 	g_engfuncs.pfnServerCommand(Command);
 }
 
-float CTraceUtil::GetUserAiming(edict_t * pEntity, int* cpId, int* cpBody, float distance)
+float CTraceUtil::GetUserAiming(edict_t* pEntity, int* cpId, int* cpBody, float distance)
 {
 	float Result = 0.0f;
 
@@ -83,7 +83,7 @@ float CTraceUtil::GetUserAiming(edict_t * pEntity, int* cpId, int* cpBody, float
 
 		if (Entityindex > 0 && Entityindex <= gpGlobals->maxClients)
 		{
-			Vector v_forward;
+			Vector v_forward = Vector(0.0f, 0.0f, 0.0f);
 
 			Vector v_src = pEntity->v.origin + pEntity->v.view_ofs;
 
