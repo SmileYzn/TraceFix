@@ -73,44 +73,69 @@ void CTraceUtil::ServerCommand(const char* Format, ...)
 	g_engfuncs.pfnServerCommand(Command);
 }
 
-float CTraceUtil::GetUserAiming(edict_t* pEntity, int* cpId, int* cpBody, float distance)
+TraceResult CTraceUtil::GetUserAiming(edict_t* pEntity, float DistanceLimit)
 {
-	float Result = 0.0f;
+	TraceResult Result = { };
 
 	if (!FNullEnt(pEntity))
 	{
-		auto Entityindex = ENTINDEX(pEntity);
+		auto EntityIndex = g_engfuncs.pfnIndexOfEdict(pEntity);
 
-		if (Entityindex > 0 && Entityindex <= gpGlobals->maxClients)
+		if (EntityIndex > 0 && EntityIndex <= gpGlobals->maxClients)
 		{
-			Vector v_forward = Vector(0.0f, 0.0f, 0.0f);
+			Vector v_forward;
 
 			Vector v_src = pEntity->v.origin + pEntity->v.view_ofs;
 
 			g_engfuncs.pfnAngleVectors(pEntity->v.v_angle, v_forward, NULL, NULL);
 
-			TraceResult trEnd;
+			Vector v_dest = v_src + v_forward * DistanceLimit;
 
-			Vector v_dest = v_src + v_forward * distance;
-
-			g_engfuncs.pfnTraceLine(v_src, v_dest, 0, pEntity, &trEnd);
-
-			*cpId = FNullEnt(trEnd.pHit) ? 0 : ENTINDEX(trEnd.pHit);
-
-			*cpBody = trEnd.iHitgroup;
-
-			if (trEnd.flFraction < 1.0f)
-			{
-				Result = (trEnd.vecEndPos - v_src).Length();
-			}
-
-			return Result;
+			g_engfuncs.pfnTraceLine(v_src, v_dest, 0, pEntity, &Result);
 		}
 	}
 
-	*cpId = 0;
-
-	*cpBody = 0;
-
 	return Result;
 }
+
+//float CTraceUtil::GetUserAiming(edict_t* pEntity, int* cpId, int* cpBody, float distance)
+//{
+//	float Result = 0.0f;
+//
+//	if (!FNullEnt(pEntity))
+//	{
+//		auto Entityindex = ENTINDEX(pEntity);
+//
+//		if (Entityindex > 0 && Entityindex <= gpGlobals->maxClients)
+//		{
+//			Vector v_forward = Vector(0.0f, 0.0f, 0.0f);
+//
+//			Vector v_src = pEntity->v.origin + pEntity->v.view_ofs;
+//
+//			g_engfuncs.pfnAngleVectors(pEntity->v.v_angle, v_forward, NULL, NULL);
+//
+//			TraceResult trEnd;
+//
+//			Vector v_dest = v_src + v_forward * distance;
+//
+//			g_engfuncs.pfnTraceLine(v_src, v_dest, 0, pEntity, &trEnd);
+//
+//			*cpId = FNullEnt(trEnd.pHit) ? 0 : ENTINDEX(trEnd.pHit);
+//
+//			*cpBody = trEnd.iHitgroup;
+//
+//			if (trEnd.flFraction < 1.0f)
+//			{
+//				Result = (trEnd.vecEndPos - v_src).Length();
+//			}
+//
+//			return Result;
+//		}
+//	}
+//
+//	*cpId = 0;
+//
+//	*cpBody = 0;
+//
+//	return Result;
+//}
