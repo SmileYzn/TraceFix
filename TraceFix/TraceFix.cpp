@@ -22,7 +22,7 @@ void CTraceFix::ServerActivate()
 
 							cvarName.append(SlotInfo->weaponName);
 
-							this->m_tf_distance[WeaponID] = gTraceUtil.CvarRegister(cvarName.c_str(), "4096.0");
+							this->m_tf_distance[WeaponID] = gTraceUtil.CvarRegister(cvarName.c_str(), "8192.0");
 						}
 					}
 				}
@@ -37,41 +37,45 @@ void CTraceFix::TraceLine(const float* vStart, const float* vEnd, int fNoMonster
 {
 	if (fNoMonsters == dont_ignore_monsters)
 	{
-		auto EntityIndex = g_engfuncs.pfnIndexOfEdict(pentToSkip);
-
-		if (EntityIndex > 0 && EntityIndex <= gpGlobals->maxClients)
+		if (!FNullEnt(pentToSkip))
 		{
-			auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
+			auto EntityIndex = g_engfuncs.pfnIndexOfEdict(pentToSkip);
 
-			if (Player)
+			if (EntityIndex > 0 && EntityIndex <= gpGlobals->maxClients)
 			{
-				if (Player->IsAlive())
+				auto Player = UTIL_PlayerByIndexSafe(EntityIndex);
+
+				if (Player)
 				{
-					if (Player->m_pActiveItem)
+					if (Player->IsAlive())
 					{
-						if ((Player->m_pActiveItem->iItemSlot() == PRIMARY_WEAPON_SLOT) || (Player->m_pActiveItem->iItemSlot() == PISTOL_SLOT) || (Player->m_pActiveItem->iItemSlot() == KNIFE_SLOT))
+						if (Player->m_pActiveItem)
 						{
-							auto AimDistance = this->m_tf_distance[Player->m_pActiveItem->m_iId]->value;
-
-							if (AimDistance > 0.0f)
+							if ((Player->m_pActiveItem->iItemSlot() == PRIMARY_WEAPON_SLOT) || (Player->m_pActiveItem->iItemSlot() == PISTOL_SLOT))
 							{
-								int TargetIndex = 0, HitBoxPlace = 0;
+								auto DistanceLimit = this->m_tf_distance[Player->m_pActiveItem->m_iId]->value;
 
-								if (gTraceUtil.GetUserAiming(pentToSkip, &TargetIndex, &HitBoxPlace, AimDistance) > 0.0f)
+								if (DistanceLimit > 0.0f)
 								{
-									if (TargetIndex > 0 && TargetIndex <= gpGlobals->maxClients)
+									auto trResult = gTraceUtil.GetUserAiming(pentToSkip, DistanceLimit);
+
+									if (!FNullEnt(trResult.pHit))
 									{
-										g_engfuncs.pfnMakeVectors(pentToSkip->v.v_angle);
+										auto TargetIndex = ENTINDEX(trResult.pHit);
 
-										auto Result = Vector(0.0f, 0.0f, 0.0f);
+										if (TargetIndex > 0 && TargetIndex <= gpGlobals->maxClients)
+										{
+											g_engfuncs.pfnMakeVectors(pentToSkip->v.v_angle);
 
-										Result[0] = (vStart[0] + (gpGlobals->v_forward[0] * 9999.0f));
+											auto vEndRes = Vector
+											(
+												(vStart[0] + (gpGlobals->v_forward[0] * 9999.0f)),
+												(vStart[1] + (gpGlobals->v_forward[1] * 9999.0f)),
+												(vStart[2] + (gpGlobals->v_forward[2] * 9999.0f))
+											);
 
-										Result[1] = (vStart[1] + (gpGlobals->v_forward[1] * 9999.0f));
-
-										Result[2] = (vStart[2] + (gpGlobals->v_forward[2] * 9999.0f));
-
-										g_engfuncs.pfnTraceLine(vStart, Result, fNoMonsters, pentToSkip, ptr);
+											g_engfuncs.pfnTraceLine(vStart, vEndRes, fNoMonsters, pentToSkip, ptr);
+										}
 									}
 								}
 							}
